@@ -1,0 +1,36 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "CMake Configure",  // launch.json에서 참조되는 이름
+            "type": "shell",
+            "command": "cmake",  // CMake 명령어 실행
+            "args": [
+                "-S", "${workspaceFolder}",    // CMakeLists.txt가 있는 폴더
+                "-B", "${workspaceFolder}/build",  // 빌드 출력 폴더
+                "-G", "Unix Makefiles"  // Makefile을 사용해서 빌드
+            ],
+            "problemMatcher": ["$gcc"],  // gcc 문제 매처 사용
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "detail": "Generate build files with CMake"
+        },
+        {
+            "label": "Make Overseer",  // 빌드할 실제 실행 파일 지정
+            "type": "shell",
+            "command": "make",  // make를 이용한 실제 빌드
+            "args": [
+                "-C", "${workspaceFolder}/build",  // CMake로 생성된 빌드 디렉토리
+                "overseer"  // 빌드할 실행 파일
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": false
+            },
+            "problemMatcher": ["$gcc"],
+            "detail": "Build the main program using Make"
+        }
+    ]
+}

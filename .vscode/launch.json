@@ -1,0 +1,25 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Launch Overseer",  // 디버깅 이름
+            "type": "cppdbg",  // C++ 디버깅
+            "request": "launch",  // 프로그램 실행
+            "program": "${workspaceFolder}/build/overseer",  // 빌드된 실행 파일 경로
+            "args": [],  // 실행할 프로그램에 전달할 인수 (필요 없다면 비워두기)
+            "stopAtEntry": false,  // 프로그램 시작 시 멈추지 않음
+            "cwd": "${workspaceFolder}",  // 작업 디렉토리
+            "environment": [],  // 환경 변수 (필요 없으면 비워두기)
+            "externalConsole": false,  // 외부 콘솔에서 실행하지 않음
+            "MIMode": "gdb",  // gdb 디버깅 사용
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",  // GDB에서 예쁘게 출력하도록 설정
+                    "ignoreFailures": true  // 실패해도 무시
+                }
+            ],
+            "preLaunchTask": "Make Overseer"  // 먼저 CMake 설정 작업을 실행
+        }
+    ]
+}
