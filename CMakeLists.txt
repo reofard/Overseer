@@ -1,7 +1,10 @@
 # CMake 프로그램의 최소 버전
 cmake_minimum_required(VERSION 3.11)
 
-set(CMAKE_BUILD_TYPE Debug)
+# 배포용 이미지와 devcontainer개발시 빌드버전을 debug와 release로 따로 사용
+if(NOT CMAKE_BUILD_TYPE)
+    set(CMAKE_BUILD_TYPE Debug CACHE STRING "Build type" FORCE)
+endif()
 
 # 프로젝트 정보
 project(
