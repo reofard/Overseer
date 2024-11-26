@@ -30,7 +30,8 @@
                 "isDefault": false
             },
             "problemMatcher": ["$gcc"],
-            "detail": "Build the main program using Make"
+            "detail": "Build the main program using Make",
+            "dependsOn": "CMake Configure"
         }
     ]
 }
