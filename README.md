@@ -25,10 +25,12 @@
 
 - [VSCode](https://code.visualstudio.com/)
 - [Docker](https://www.docker.com/)
+- [Windows Terminal](https://apps.microsoft.com/detail/9n0dx20hk701?rtc=1&hl=ko-kr&gl=KR)
+- [Linux Terminator](https://gnome-terminator.org/)
 
 <br>
 
-# Building Overseer Dev Environment
+# Build Overseer to Dev Environment
 
 1. Clone the repository:
 
@@ -48,3 +50,19 @@ code .
 ![start dev container](/asset/readme/setting_first.png)
 
 4. press ```f5``` to build and debug
+
+<br>
+
+# Build Overseer to Deployment docker image
+
+1. enter repository
+
+```bash
+cd Overseer
+```
+
+2. build deployment image
+
+```bash
+docker build -t overseer .
+```
