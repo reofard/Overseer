@@ -1,10 +1,12 @@
-#include <includes/Scheduler/Action/Action.hpp>
+#pragma once
 
 #include <memory>
 #include <string>
 #include <vector>
 #include <list>
 #include <set>
+
+class ActionNode;
 
 class Task
 {

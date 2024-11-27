@@ -1,8 +1,10 @@
-#include <includes/Scheduler/Task/Task.hpp>
+#pragma once
 
 #include <string>
 #include <memory>
 #include <list>
+
+class Task;
 
 // 실제 Action 수행시 필요 정보 구조체
 struct Action

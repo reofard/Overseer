@@ -15,8 +15,16 @@ project(
   
 add_executable (overseer
   overseer.cpp
+
+  src/Robot/Robot.cpp
+
+  src/Scheduler/Scheduler.cpp
+  src/Scheduler/Action/Action.cpp
+  src/Scheduler/Task/Task.cpp
 )
 
 target_compile_options(overseer PUBLIC -Wall -Werror)
 
-target_include_directories(overseer PUBLIC ${CMAKE_SOURCE_DIR}/includes)
+target_include_directories(overseer PUBLIC
+  ${CMAKE_SOURCE_DIR}/includes
+)

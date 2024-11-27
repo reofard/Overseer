@@ -1,10 +1,14 @@
-#include <includes/Scheduler/Action/Action.hpp>
-#include <includes/Scheduler/Task/Task.hpp>
+#pragma once
+
+#include "Robot/Robot.hpp"
+
+#include "Scheduler/Action/Action.hpp"
+#include "Scheduler/Task/Task.hpp"
 
 #include <memory>
 #include <string>
 #include <map>
-#include <pair>
+#include <utility>
 
 typedef std::pair<std::shared_ptr<Task>, std::shared_ptr<Robot>> MatchInfo;
 
@@ -15,7 +19,7 @@ private:
     std::map<int, MatchInfo> match_table;
 
     // 할당 Task 정보
-    std::set<std::shared_ptr<Task>> actions;
+    std::set<std::shared_ptr<Task>> tasks;
 
     // 수행 중 Action정보
     std::set<std::shared_ptr<ActionNode>> actions;
