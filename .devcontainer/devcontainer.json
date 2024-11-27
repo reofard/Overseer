@@ -16,7 +16,9 @@
 				"streetsidesoftware.code-spell-checker",  // 맞춤법 검사기
 				"ms-vscode.cpptools",  // C/C++ 확장
 				"ms-vscode.cmake-tools", // CMake Tools (필요시 추가)
-				"twxs.cmake" // CMake (필요시 추가)
+				"twxs.cmake", // CMake (필요시 추가)
+				"ms-azuretools.vscode-docker", // 도커
+				"ms-vscode.cpptools-extension-pack" // c++ Extention
 			]
 		}
 	}
