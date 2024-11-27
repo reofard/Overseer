@@ -8,7 +8,7 @@
             "args": [
                 "-S", "${workspaceFolder}",    // CMakeLists.txt가 있는 폴더
                 "-B", "${workspaceFolder}/build",  // 빌드 출력 폴더
-                "-G", "Unix Makefiles"  // Makefile을 사용해서 빌드
+                "-G", "Ninja"  // Makefile을 사용해서 빌드
             ],
             "problemMatcher": ["$gcc"],  // gcc 문제 매처 사용
             "group": {
@@ -20,7 +20,7 @@
         {
             "label": "Make Overseer",  // 빌드할 실제 실행 파일 지정
             "type": "shell",
-            "command": "make",  // make를 이용한 실제 빌드
+            "command": "ninja",  // make를 이용한 실제 빌드
             "args": [
                 "-C", "${workspaceFolder}/build",  // CMake로 생성된 빌드 디렉토리
                 "overseer"  // 빌드할 실행 파일

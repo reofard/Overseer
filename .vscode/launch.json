@@ -10,7 +10,6 @@
             "stopAtEntry": false,  // 프로그램 시작 시 멈추지 않음
             "cwd": "${workspaceFolder}",  // 작업 디렉토리
             "environment": [],  // 환경 변수 (필요 없으면 비워두기)
-            "externalConsole": false,  // 외부 콘솔에서 실행하지 않음
             "MIMode": "gdb",  // gdb 디버깅 사용
             "setupCommands": [
                 {

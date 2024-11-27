@@ -6,6 +6,7 @@ FROM ubuntu:24.04
 # 필수 패키지들 설치
 RUN apt-get update && apt-get install -y \
     build-essential \
+    ninja-build \
     cmake \
     curl \
     git \
