@@ -24,6 +24,7 @@
 # Prerequisites
 
 - [VSCode](https://code.visualstudio.com/)
+    - [DevContainers Extension](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers)
 - [Docker](https://www.docker.com/)
 - [Windows Terminal](https://apps.microsoft.com/detail/9n0dx20hk701?rtc=1&hl=ko-kr&gl=KR)
 - [Linux Terminator](https://gnome-terminator.org/)
