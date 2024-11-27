@@ -1,3 +1,5 @@
+# 배포용 이미지
+
 # 기본 Ubuntu 24.04 LTS 이미지
 FROM ubuntu:24.04
 
@@ -5,7 +7,6 @@ FROM ubuntu:24.04
 RUN apt-get update && apt-get install -y \
     build-essential \
     cmake \
-    gdb \
     curl \
     git \
     && apt-get clean
