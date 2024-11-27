@@ -1,5 +1,3 @@
-#pragma once
-
 #include "Robot/Robot.hpp"
 
 #include "Scheduler/Action/Action.hpp"
