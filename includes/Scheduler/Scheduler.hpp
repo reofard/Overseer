@@ -5,7 +5,7 @@
 
 #include <memory>
 #include <string>
-#include <map>
+#include <set>
 #include <utility>
 
 typedef std::pair<std::shared_ptr<Task>, std::shared_ptr<Robot>> MatchInfo;
@@ -20,5 +20,5 @@ private:
     std::set<std::shared_ptr<Task>> tasks;
 
     // 수행 중 Action정보
-    std::set<std::shared_ptr<ActionNode>> actions;
+    std::set<std::shared_ptr<Action>> actions;
 };
