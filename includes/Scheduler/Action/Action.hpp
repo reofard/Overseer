@@ -2,17 +2,26 @@
 #include <memory>
 #include <list>
 
+typedef enum
+{
+  PENDING,
+  MOVING,
+  EXECUTING,
+  COMPLETED,
+} ActionState;
+
 class Task;
+class UUID;
 
 // 실제 Action 수행시 필요 정보 구조체
 struct ActionData
 {
     std::string available_robot_type;   // 수행 로봇 타입
-    std::string locaction;                    // 수행 위치
+    std::string locaction;              // 수행 위치
     std::string action;                 // 작업에 필요한 정보
     
     // 기본 생성자
-    ActionData() : available_robot_type(""), locaction(""), action("") {}
+    ActionData() = delete;
 
     // 매개변수를 받는 생성자
     ActionData(const std::string& robot_type, const std::string& loc, const std::string& act)
@@ -25,6 +34,9 @@ private:
 
     // Action 식별자, 초기화 리스트로 action 객체 생성시 초기화
     const int id;
+    static UUID uuid_converter;
+
+    ActionState state;
 
     // 실제 Action 수행시 필요 정보
     ActionData data;
@@ -44,13 +56,20 @@ public:
     
     //의도되지 않은 default 생성자 제거
     Action() = delete;
+    ~Action();
 
-    // 생성자
+    // 생성로직
+    // 주어진 데이터에 따른 Action 노드 생성
     Action(std::string robot_type, std::string loc, std::string action);
 
-    //의존관계 추가
+    // 생성로직
+    // Action간 Dependency 추가
     void addParent(std::shared_ptr<Action> parent);
     void addChild(std::shared_ptr<Action> child);
+
+    //제어 로직
+
+    //종료 로직
 
     //기본 Action 정보 반환
     int getId();

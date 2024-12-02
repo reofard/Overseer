@@ -9,20 +9,21 @@ class Action;
 class Task
 {
 private:
+    // task 설명
+    std::string comment;
+
     // 수행 로봇
     std::vector<std::string> target_robot_type;
 
     // 소속 Action정보
     std::map<int, std::shared_ptr<Action>> actions;
 
-private:
-
-    // 의존관계 생성, task 생성시 에만 사용하기때문에 private
-    void addActionDependency(int parent, int child);
-
 public:
-    // Task생성
-    Task();
+    // 생성자
+    Task() = delete;
+    Task(std::string comment);
+
+    void addAction(std::shared_ptr<Action>& action);
 
 
     // Action이 끝났을 때 Task 처리(진행사항 기록, 작업 종료 여부 확인)

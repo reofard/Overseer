@@ -1,11 +1,20 @@
 #include "Scheduler/Action/Action.hpp"
-#include <string>
+#include "utils/UuidManager.hpp"
 
-Action::Action(std::string robot_type, std::string loc, std::string action) : id(0)
+UUID Action::uuid_converter;
+
+// 생성자
+Action::Action(std::string robot_type, std::string loc, std::string action) : id(uuid_converter.issueID()), data(ActionData("", "", ""))
 {
+    state=PENDING;
     this->data = ActionData(robot_type, loc, action);
 }
 
+// 소멸자
+Action::~Action()
+{
+    uuid_converter.deleteID(getId());
+}
 
 void Action::addParent(std::shared_ptr<Action> parent)
 {
