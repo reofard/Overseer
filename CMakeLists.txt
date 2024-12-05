@@ -22,11 +22,14 @@ set(BOOST_LIBRARY_DIRS "/usr/lib/x86_64-linux-gnu")
 add_executable (overseer
   overseer.cpp
 
-  src/Robot/Robot.cpp
+  src/Executor/Executor.cpp
 
+  src/Scheduler/MatchTable.cpp
   src/Scheduler/Scheduler.cpp
+
   src/Scheduler/Action/Action.cpp
   src/Scheduler/Task/Task.cpp
+
   src/utils/UuidManager.cpp
 )
 
