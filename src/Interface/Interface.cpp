@@ -12,7 +12,11 @@ void Interface::createTask()
     std::shared_ptr<Task> task = std::make_shared<Task>("목업 테스크");
     std::vector<std::shared_ptr<Action>> actions;
 
+    // 실제 Match table상의 매칭 아이디
     std::map<int, int> match_set;
+
+    // std::vector<> action_json;
+    std::set<std::pair<int, int>> dependencys= {{0, 2}, {1, 2}};
     // 지금은 목업데이터만 생성
     for(int i = 0; i < 3; i++)
     {
@@ -45,8 +49,12 @@ void Interface::createTask()
         task->addAction(action);                    // 복사해서 포인터 전달
         actions.emplace_back(std::move(action));    // 이동해서 포인터 전달
     }
-    Action::addActionDependency(actions[0], actions[2]);
-    Action::addActionDependency(actions[1], actions[2]);
+
+    for(const auto& [parent, child] : dependencys)
+    {
+        Action::addActionDependency(actions[parent], actions[child]);
+    }
+
 
     scheduler->addAction(std::move(actions));
     monitor->addTask(std::move(task));
