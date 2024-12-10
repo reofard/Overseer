@@ -24,14 +24,21 @@ project(
 add_executable (overseer
   overseer.cpp
 
+  # 작업 수행자
   src/Executor/Executor.cpp
-
-  src/Scheduler/MatchTable.cpp
+  src/Executor/Event.cpp
+  
+  # 스케줄링
   src/Scheduler/Scheduler.cpp
 
+  src/Scheduler/MatchTable.cpp
+
   src/Scheduler/Action/Action.cpp
+  src/Scheduler/Action/Event.cpp
+
   src/Scheduler/Task/Task.cpp
 
+  # 기타 유틸
   src/utils/UuidManager.cpp
   src/EventManager/EventManager.cpp
 )

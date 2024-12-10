@@ -1,18 +1,20 @@
 #include <string>
 #include <memory>
 #include <list>
+#include <atomic>
 
 typedef int match_index;
 
 typedef enum
 {
   PENDING,
-  MOVING,
+  WAITING,
   EXECUTING,
-  COMPLETED,
+  TERMINATE,
 } ActionState;
 
 class Task;
+class Executor;
 class UUID;
 
 // 실제 Action 수행시 필요 정보 구조체
@@ -48,6 +50,10 @@ private:
     // 현재 Action의 스케줄링 상태
     ActionState state;
 
+    // 수행을 위한 상태
+    std::atomic<bool> action_ready{false};
+    std::atomic<bool> executor_ready{false};
+
     // 실제 Action 수행시 필요 정보
     ActionData data;
 
@@ -58,6 +64,9 @@ private:
     // 해당 Action에 해당하는 매칭테이블의 인덱스
     // 0일경우 타입맞는 아무 로봇이나 사용 가능
     const match_index matching_robot_index;
+    
+    // 수행 할 실제 로봇
+    std::weak_ptr<Executor> executor;
 
     // 속한 Task 정보
     std::weak_ptr<Task> task;
@@ -84,6 +93,12 @@ public:
 
 
     //제어 로직
+    // Action 할당
+    void assign(std::shared_ptr<Executor>& executor);
+    void SetActionReady();
+    void SetExecutorReady();
+    void ready();
+    void Finish();
 
     //기본 Action 정보 Getter
     int getId();
