@@ -4,7 +4,7 @@
 UUID Action::uuid_converter;
 
 // 생성자
-Action::Action(std::string robot_type, std::string loc, std::string action, match_index idx) : id(uuid_converter.issueID()), data(ActionData("", "", "")), matching_robot_index(idx)
+Action::Action(std::string robot_type, std::string loc, std::string action) : id(uuid_converter.issueID()), data(ActionData("", "", ""))
 {
     state=PENDING;
     this->data = ActionData(robot_type, loc, action);
@@ -41,10 +41,6 @@ Action::~Action()
 int Action::getId()
 {
     return id;
-}
-std::string Action::getType()
-{
-    return data.available_robot_type;
 }
 std::string Action::getlocation()
 {

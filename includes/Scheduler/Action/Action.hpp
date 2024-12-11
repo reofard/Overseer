@@ -3,8 +3,6 @@
 #include <list>
 #include <atomic>
 
-typedef int match_index;
-
 typedef enum
 {
   PENDING,
@@ -20,7 +18,6 @@ class UUID;
 // 실제 Action 수행시 필요 정보 구조체
 struct ActionData
 {
-    std::string available_robot_type;   // 수행 로봇 타입
     std::string locaction;              // 수행 위치
     std::string action;                 // 작업에 필요한 정보
     
@@ -29,7 +26,7 @@ struct ActionData
 
     // 매개변수를 받는 생성자
     ActionData(const std::string& robot_type, const std::string& loc, const std::string& act)
-        : available_robot_type(robot_type), locaction(loc), action(act) {}
+        : locaction(loc), action(act) {}
 };
 
 // 작업 스케줄링의 단위인 Action을 나타내는 class
@@ -61,10 +58,6 @@ private:
     std::list<std::weak_ptr<Action>> parents;
     std::list<std::shared_ptr<Action>> childs;
 
-    // 해당 Action에 해당하는 매칭테이블의 인덱스
-    // 0일경우 타입맞는 아무 로봇이나 사용 가능
-    const match_index matching_robot_index;
-    
     // 수행 할 실제 로봇
     std::weak_ptr<Executor> executor;
 
@@ -78,7 +71,7 @@ public:
 
     // 생성로직
     // 주어진 데이터에 따른 Action 노드 생성
-    Action(std::string robot_type, std::string loc, std::string action, match_index idx);
+    Action(std::string robot_type, std::string loc, std::string action);
 
     // Action간 의존관계 추가 전역 함수
     static void addActionDependency(std::shared_ptr<Action>& parent, std::shared_ptr<Action>& child);
@@ -102,7 +95,6 @@ public:
 
     //기본 Action 정보 Getter
     int getId();
-    std::string getType();
     std::string getlocation();
     std::string getExecInfo();
 
