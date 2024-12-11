@@ -21,9 +21,5 @@ private:
 public:
 
     // 스케줄링 할 Action 추가
-    void addAction(std::vector<std::shared_ptr<Action>> actions);
-
-    // 다른 로봇이 수행해야하는 Action이 존재할 때 매칭 정보 생성 및 id 발급 함수
-    int addMatchInfo();
-
+    void addAction(std::vector<std::shared_ptr<Action>> actions, std::vector<int> match_info);
 };
