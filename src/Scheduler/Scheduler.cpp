@@ -13,8 +13,8 @@ void Scheduler::addAction(std::vector<std::shared_ptr<Action>> actions, std::vec
         auto& match_index = match_info[i];
 
         // 할당할 아이디 설정
-        int id = action->getId();
-        int issued_id = -1;
+        ActionID id = action->getId();
+        MatchIDX issued_id = -1;
 
         // Action queue에 action 추가
         this->actions.insert({id, std::move(action)});
@@ -40,6 +40,5 @@ void Scheduler::addAction(std::vector<std::shared_ptr<Action>> actions, std::vec
             // Task내부에서 다른 Action과 수행하는 로봇이 독립적이기 때문에 굳이 match_set에 저장하지 않음
             issued_id = match_table->issueMatchID(id);
         }
-
     }
 }

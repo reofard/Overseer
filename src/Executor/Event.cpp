@@ -11,6 +11,11 @@ void Executor::assign(std::shared_ptr<Action>& action)
     
     this->action = action;
     state = ExecutorState::ASSIGN;
+
+    /*TODO : Path Planner에 goal 입력*/
+    // 일단은 로봇이 할당되면 무조건 READY상태로 변경
+    // 항상 로봇이 Action이 종료될 때 다음 Action위치에 도착했다고 가정
+    setReady();
 }
 void Executor::setReady()
 {
@@ -35,6 +40,10 @@ void Executor::PostAction()
 }
 void Executor::Finish()
 {
+    // 로봇으로부터 작업 종료 메세지를 받아 Action에 전달
+    this->action->Finish();
+
+    // 할당된 Action이 종료되었으니 Action 할당 해제
     this->action.reset();
     state = ExecutorState::UNASSIGN;
 }
