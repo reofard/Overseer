@@ -38,9 +38,17 @@ add_executable (overseer
 
   src/Scheduler/Task/Task.cpp
 
-  # 기타 유틸
+  # UUID발급 유틸
   src/utils/UuidManager.cpp
+
+  # 쓰레드풀기반 이벤트 Executor
   src/EventManager/EventManager.cpp
+
+  # Behavior Tree
+  src/utils/BehaviorTree/ActionNode.cpp
+  src/utils/BehaviorTree/CompositeNode.cpp
+  src/utils/BehaviorTree/Selector.cpp
+  src/utils/BehaviorTree/Sequence.cpp
 )
 
 target_compile_options(overseer PUBLIC -Wall -Werror)
