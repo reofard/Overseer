@@ -34,12 +34,7 @@ void Interface::createTask()
         actions.emplace_back(std::move(action));    // 이동해서 포인터 전달
     }
 
-    for(const auto& [parent, child] : dependencys)
-    {
-        Action::addActionDependency(actions[parent], actions[child]);
-    }
 
-
-    scheduler->addAction(std::move(actions), std::move(match_info));
+    scheduler->inputAction(std::move(actions), std::move(match_info), std::move(dependencys));
     monitor->addTask(std::move(task));
 }
