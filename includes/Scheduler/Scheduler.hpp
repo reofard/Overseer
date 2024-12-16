@@ -1,10 +1,16 @@
-#include <memory>
 #include <string>
+
 #include <set>
 #include <map>
-#include <utility>
+#include <list>
+#include <queue>
 #include <vector>
+
+#include <utility>
+
+#include <memory>
 #include <atomic>
+#include <mutex>
 
 class MatchTable;
 
@@ -29,6 +35,16 @@ class Scheduler
 private:
     // 로봇-Action 매칭 정보
     std::unique_ptr<MatchTable> match_table;
+
+    // executor 입력 queue
+    std::mutex executor_mtx;
+    std::list<std::shared_ptr<Executor>> executor_queue;
+
+    // Executor 정보
+    std::set<ExecutorID> ready_executors;
+    std::set<ExecutorID> running_executors;
+    std::map<ExecutorID, std::shared_ptr<Executor>> executors;
+
     // action 입력 queue
     std::mutex input_mtx;
     std::mutex deps_mtx;
@@ -36,7 +52,9 @@ private:
     std::list<std::pair<ActionID, ActionID>> dependency_queue;
 
     // 수행 중 Action정보
+    std::set<ActionID> ready_actions;
     std::set<ActionID> running_actions;
+    std::set<ActionID> terminate_actions;
     std::map<ActionID, std::shared_ptr<Action>> actions;
 
     // Action간 의존관계 자료구조
@@ -45,7 +63,10 @@ private:
 
 
     // Event 발생을 위한 flag
-    //Action 의존관계 편집 및 큐에 쌓여있는 Action들 모두 등록
+    // 새로운 Executor 추가 이벤트
+    std::atomic<bool> NEW_EXECUTOR_ADDED{false};      // 새롭게 스케줄링해야 하는 Executor가 추가된 경우
+
+    // Action 의존관계 편집 및 큐에 쌓여있는 Action들 모두 등록
     std::atomic<bool> NEW_ACTION_ADDED{false};      // 새롭게 스케줄링해야 하는 Action이 추가된 경우
 
     // 준비된 Executor나 Action이 있는경우, Executor-Action 매칭 및 수행 시작
@@ -60,10 +81,17 @@ private:
 
 public:
 
+    // Executor 추가
+    void inputExecutor();
+    void addExecutor();
+
     // 스케줄링 할 Action 추가
     void inputTask(std::vector<std::shared_ptr<Action>> actions, std::vector<int> match_info, std::set<std::pair<ActionID, ActionID>> dependencys);
-    void addAction(std::vector<std::shared_ptr<Action>> actions, std::vector<int> match_info);
+    void addAction();
+    void adjustDependencies();
+    void refreshExecutors();
+    void releaseActions();
 
-    // 수행할 Action간추리는 함수
-    // void Action
+    // Match Table과 당장 수행해야하는 Action을 이용하여 가용 가능 Executor 선별 후 할당
+    void match();
 };

@@ -9,6 +9,7 @@ class Action;
 
 typedef int MatchIdx;
 typedef int ActionId;
+typedef int ExecutorId;
 
 // Executor와 Action 사이의 매칭 정보를 나타내는 Class
 class MatchTable
@@ -22,6 +23,7 @@ private:
     std::map<MatchIdx, std::shared_ptr<Executor>> match_table;
     std::map<MatchIdx, int> match_count;
     std::map<ActionId, MatchIdx> action_2_match;
+    std::map<ExecutorId, MatchIdx> executor_2_match;
 
 public:
     MatchTable();
@@ -38,5 +40,9 @@ public:
 
     // 매칭 로봇 조회 함수
     std::shared_ptr<Executor> getMatchedExecutor(MatchIdx idx);
+    std::string getMatchType(MatchIdx idx);
+    bool isMatched(ExecutorId id);
     
+    // action에 매칭된 매칭 index 조회 함수
+    MatchIdx getMatchIdx(ActionId idx);
 };
