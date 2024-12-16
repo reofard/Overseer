@@ -54,10 +54,6 @@ private:
     // 실제 Action 수행시 필요 정보
     ActionData data;
 
-    // 수행 Action 의존관계
-    std::list<std::weak_ptr<Action>> parents;
-    std::list<std::shared_ptr<Action>> childs;
-
     // 수행 할 실제 로봇
     std::weak_ptr<Executor> executor;
 
@@ -72,13 +68,6 @@ public:
     // 생성로직
     // 주어진 데이터에 따른 Action 노드 생성
     Action(std::string robot_type, std::string loc, std::string action);
-
-    // Action간 의존관계 추가 전역 함수
-    static void addActionDependency(std::shared_ptr<Action>& parent, std::shared_ptr<Action>& child);
-    
-    // Action간 Dependency 추가
-    void addParent(std::shared_ptr<Action> parent);
-    void addChild(std::shared_ptr<Action> child);
 
     //종료 로직
     // 소멸자 정의, id 및 uuid할당 해제
@@ -95,6 +84,7 @@ public:
 
     //기본 Action 정보 Getter
     int getId();
+    ActionState getState();
     std::string getlocation();
     std::string getExecInfo();
 

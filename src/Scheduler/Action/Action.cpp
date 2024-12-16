@@ -34,6 +34,8 @@ void Action::addChild(std::shared_ptr<Action> child)
 Action::~Action()
 {
     uuid_converter.deleteID(getId());
+    executor.reset();
+    task.reset();
 }
 
 
@@ -41,6 +43,10 @@ Action::~Action()
 int Action::getId()
 {
     return id;
+}
+ActionState Action::getState()
+{
+    return state;
 }
 std::string Action::getlocation()
 {
