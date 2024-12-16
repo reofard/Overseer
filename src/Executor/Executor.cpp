@@ -1,6 +1,8 @@
 #include "Executor/Executor.hpp"
 #include "utils/UuidManager.hpp"
 
+UUID Executor::uuid_converter;
+
 // 생성자
 Executor::Executor(std::string robot_type) : id(uuid_converter.issueID()), type(robot_type)
 {
