@@ -35,6 +35,6 @@ void Interface::createTask()
     }
 
 
-    scheduler->inputAction(std::move(actions), std::move(match_info), std::move(dependencys));
+    scheduler->inputTask(std::move(actions), std::move(match_info), std::move(dependencys));
     monitor->addTask(std::move(task));
 }
