@@ -57,7 +57,7 @@ void Action::finish()
     }
     
     this->executor.reset();
-    state = ActionState::TERMINATE;
+    state = ActionState::TERMINATED;
 
     /*TODO : Scheduler에 Action하나가 종료되어 남는 로봇이 있으니 다시 다음에 수행할 Action스케줄링 하라는 명령 전달*/
 }

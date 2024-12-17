@@ -8,7 +8,7 @@ typedef enum
   PENDING,
   WAITING,
   EXECUTING,
-  TERMINATE,
+  TERMINATED,
 } ActionState;
 
 class Task;

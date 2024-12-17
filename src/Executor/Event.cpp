@@ -45,6 +45,12 @@ void Executor::finish()
 
     // 할당된 Action이 종료되었으니 Action 할당 해제
     this->action.reset();
+    state = ExecutorState::TERMINATE;
+}
+
+void Executor::release()
+{
+    // 다시 로봇을 작업 할당 가능상태로 변경
     state = ExecutorState::UNASSIGN;
 }
 //구현체

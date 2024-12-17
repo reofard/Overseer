@@ -221,9 +221,48 @@ void Scheduler::match()
 
 void Scheduler::refreshExecutors()
 {
+    for(auto iter = running_executors.begin(); iter != running_executors.end(); iter++)
+    {
+        int executor_id = *iter;
+        auto executor = executors.at(executor_id);
+        if(executor->getState() != ExecutorState::TERMINATE)
+        {
+            continue;
+        }
 
+        // executor를 작업 할당 가능상태로 변환
+        executor->release();
+
+        // ready큐에 executor추가하고, running큐에서 제거
+        iter = running_executors.erase(iter);
+        ready_executors.insert(executor_id);
+    }
 }
 void Scheduler::releaseActions()
 {
+    for(auto iter = running_actions.begin(); iter != running_actions.end(); iter++)
+    {
+        int action_id = *iter;
+        auto action = actions.at(action_id);
+        if(action->getState() != ActionState::TERMINATED)
+        {
+            continue;
+        }
 
+        
+        // 수행이 종료된 action의 shared count를 확인후 메모리 해제
+        // 현재 지역 변수 action과 Actions 맵에 각각 1개씩 총 두 개만 있어야 함
+        if (action.use_count() != 2)
+        {
+            // TODO: 다른 action을 갖고있을만한 객체들 추적해서 삭제 혹은 스케줄링
+            continue;
+        }
+
+        // 해당 action를 참조하는 남은 shared_ptr(action 지역 변수, actions map container value)들을 모두 할당 해제
+        action.reset();
+        actions.erase(action_id);
+
+        // ready큐에 executor추가하고, running큐에서 제거
+        iter = running_actions.erase(iter);
+    }
 }
