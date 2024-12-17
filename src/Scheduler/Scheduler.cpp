@@ -1,3 +1,5 @@
+#include "EventManager/EventManager.hpp"
+
 #include "Scheduler/Scheduler.hpp"
 #include "Scheduler/MatchTable.hpp"
 #include "Scheduler/Action/Action.hpp"
@@ -11,6 +13,7 @@
 #include "utils/BehaviorTree/CompositeNode.hpp"
 
 #include <stdexcept>
+#include<iostream>
 
 Scheduler::Scheduler()
 {
@@ -46,6 +49,11 @@ Scheduler::Scheduler()
     sequence_1->addChild(action_2);
     sequence_1->addChild(if_decorator_2);
     sequence_1->addChild(if_decorator_3);
+
+    behavior_tree->addChild(sequence_1);
+
+    EventManager& instance = EventManager::getInstance();
+    instance.addTimerEvent(std::bind(&Sequence::tick, behavior_tree), std::chrono::duration<float>(1.f));
 }
 
 void Scheduler::inputExecutor()
@@ -167,6 +175,7 @@ void Scheduler::addAction()
 
 void Scheduler::adjustDependencies()
 {
+    std::cout << "adjustDependencies!" << std::endl;
     // TODO : 의존관계 분석 및 의존관계 할당
 
     // 현재는 그냥 의존관계 해소된 얘들 무조건 ready queue에 추가
