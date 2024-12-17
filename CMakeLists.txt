@@ -47,6 +47,7 @@ add_executable (overseer
   # Behavior Tree
   src/utils/BehaviorTree/ActionNode.cpp
   src/utils/BehaviorTree/CompositeNode.cpp
+  src/utils/BehaviorTree/DecoratorNode.cpp
   src/utils/BehaviorTree/Selector.cpp
   src/utils/BehaviorTree/Sequence.cpp
 )

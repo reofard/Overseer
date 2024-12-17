@@ -6,10 +6,10 @@ class BTNode;
 class ActionNode : public BTNode
 {
 private:
-    std::function<Status()> action;
+    std::function<void()> action;
 
 public:
-    explicit ActionNode(std::function<Status()> action) : action(std::move(action)) { }
+    explicit ActionNode(std::function<void()> action) : action(std::move(action)) { }
 
-    Status tick() override;
+    void tick() override;
 };

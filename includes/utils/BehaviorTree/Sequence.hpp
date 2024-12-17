@@ -4,5 +4,5 @@
 class Sequence : public CompositeNode
 {
 public:
-    Status tick() override;
+    void tick() override;
 };

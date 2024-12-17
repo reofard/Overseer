@@ -1,14 +1,10 @@
 #include "utils/BehaviorTree/Sequence.hpp"
 
-Status Sequence::tick()
+void Sequence::tick()
 {
     for (auto& child : children)
     {
-        Status status = child->tick();
-        if (status != Status::SUCCESS)
-        {
-            return status; // FAILURE나 RUNNING 반환
-        }
+        child->tick();
     }
-    return Status::SUCCESS;
+    return;
 }

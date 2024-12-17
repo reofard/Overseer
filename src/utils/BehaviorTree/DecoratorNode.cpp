@@ -2,16 +2,20 @@
 #include <functional>
 #include "utils/BehaviorTree/DecoratorNode.hpp"
 
-Status DecoratorNode::tick()
+void DecoratorNode::tick()
 {
-    return child ? child->tick() : Status::FAILURE;
+    if(child)
+    {
+        child->tick();
+    }
+    return;
 }
 
-Status ConditionDecorator::tick()
+void ConditionDecorator::tick()
 {
     if (condition())
     {
-        return DecoratorNode::tick(); // 자식 노드 실행
+        DecoratorNode::tick();
     }
-    return Status::FAILURE; // 조건이 충족되지 않으면 실패
+    return;
 }

@@ -13,7 +13,7 @@ public:
     explicit DecoratorNode(std::shared_ptr<BTNode> childNode)
         : child(std::move(childNode)) { }
 
-    virtual Status tick() override;
+    virtual void tick() override;
 };
 
 // ConditionDecorator: 조건에 따라 자식 노드 실행
@@ -26,5 +26,5 @@ public:
     ConditionDecorator(std::shared_ptr<BTNode> childNode, std::function<bool()> cond)
         : DecoratorNode(std::move(childNode)), condition(std::move(cond)) {}
 
-    Status tick() override;
+    void tick() override;
 };

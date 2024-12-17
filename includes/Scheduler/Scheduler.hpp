@@ -17,6 +17,8 @@ class MatchTable;
 class Executor;
 class Action;
 
+class Sequence;
+
 typedef int MatchIDX;
 typedef int ActionID;
 typedef int ExecutorID;
@@ -62,7 +64,10 @@ private:
     std::map<ActionID, std::shared_ptr<Dependency>> dependencies;
 
 
-    // Event 발생을 위한 flag
+    // 각 이벤트를 효율적으로 처리하기 위한 Behavior Tree
+    std::shared_ptr<Sequence> behavior_tree;
+
+    // 이벤트 발생 플래그를 위한 flag
     // 새로운 Executor 추가 이벤트
     std::atomic<bool> NEW_EXECUTOR_ADDED{false};      // 새롭게 스케줄링해야 하는 Executor가 추가된 경우
 
@@ -80,6 +85,7 @@ private:
     
 
 public:
+    Scheduler();
 
     // Executor 추가
     void inputExecutor();

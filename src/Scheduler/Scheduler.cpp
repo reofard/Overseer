@@ -2,7 +2,51 @@
 #include "Scheduler/MatchTable.hpp"
 #include "Scheduler/Action/Action.hpp"
 #include "Executor/Executor.hpp"
-#include <ranges>
+
+#include "utils/BehaviorTree/ActionNode.hpp"
+#include "utils/BehaviorTree/Sequence.hpp"
+#include "utils/BehaviorTree/Selector.hpp"
+#include "utils/BehaviorTree/Node.hpp"
+#include "utils/BehaviorTree/DecoratorNode.hpp"
+#include "utils/BehaviorTree/CompositeNode.hpp"
+
+#include <stdexcept>
+
+Scheduler::Scheduler()
+{
+    // Scheduler의 행동트리 구축
+    behavior_tree = std::make_shared<Sequence>();
+
+    auto action_1 = std::make_shared<ActionNode>(std::bind(&Scheduler::addAction, this));
+    auto action_2 = std::make_shared<ActionNode>(std::bind(&Scheduler::adjustDependencies, this));
+    auto action_3 = std::make_shared<ActionNode>(std::bind(&Scheduler::match, this));
+    auto action_4 = std::make_shared<ActionNode>(std::bind(&Scheduler::refreshExecutors, this));
+    auto action_5 = std::make_shared<ActionNode>(std::bind(&Scheduler::releaseActions, this));
+
+    auto if_decorator_1 = std::make_shared<ConditionDecorator>(
+        action_1,
+        [&]() -> bool { return NEW_ACTION_ADDED; }
+    );
+    auto if_decorator_2 = std::make_shared<ConditionDecorator>(
+        action_3,
+        [&]() -> bool { return EXECUTOR_READY & ACTION_READY; }
+    );
+
+    auto sequence_2 = std::make_shared<Sequence>();
+    sequence_2->addChild(action_4);
+    sequence_2->addChild(action_5);
+
+    auto if_decorator_3 = std::make_shared<ConditionDecorator>(
+        sequence_2,
+        [&]() -> bool { return ACTION_TO_REMOVE; }
+    );
+
+    auto sequence_1 = std::make_shared<Sequence>();
+    sequence_1->addChild(if_decorator_1);
+    sequence_1->addChild(action_2);
+    sequence_1->addChild(if_decorator_2);
+    sequence_1->addChild(if_decorator_3);
+}
 
 void Scheduler::inputExecutor()
 {
@@ -238,6 +282,7 @@ void Scheduler::refreshExecutors()
         ready_executors.insert(executor_id);
     }
 }
+
 void Scheduler::releaseActions()
 {
     for(auto iter = running_actions.begin(); iter != running_actions.end(); iter++)
@@ -255,12 +300,15 @@ void Scheduler::releaseActions()
         if (action.use_count() != 2)
         {
             // TODO: 다른 action을 갖고있을만한 객체들 추적해서 삭제 혹은 스케줄링
+            // 현재는 그냥 에러 띄우기
+            
+            throw std::logic_error("Action cant be destroyed. This Action(" + std::to_string(action_id) + ") has additional reference count(" + std::to_string(action.use_count()) + ")");
             continue;
         }
 
         // 해당 action를 참조하는 남은 shared_ptr(action 지역 변수, actions map container value)들을 모두 할당 해제
-        action.reset();
         actions.erase(action_id);
+        action.reset();
 
         // ready큐에 executor추가하고, running큐에서 제거
         iter = running_actions.erase(iter);

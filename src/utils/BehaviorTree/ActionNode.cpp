@@ -1,6 +1,6 @@
 #include "utils/BehaviorTree/ActionNode.hpp"
 
-Status ActionNode::tick()
+void ActionNode::tick()
 {
     return action();
 }
