@@ -25,10 +25,10 @@ void Executor::setReady()
     }
 
     // 로봇이 작업 수행 위치에 도착하여 Action을 받을 수 있는 경우
-    action->SetExecutorReady();
+    action->setExecutorReady();
     state = ExecutorState::READY;
 }
-void Executor::PostAction()
+void Executor::postAction()
 {
     if(state != ExecutorState::ASSIGN)
     {
@@ -38,10 +38,10 @@ void Executor::PostAction()
     /* TODO : 로봇에 수행할 액션 보내기 */
     state = ExecutorState::EXECUTION;
 }
-void Executor::Finish()
+void Executor::finish()
 {
     // 로봇으로부터 작업 종료 메세지를 받아 Action에 전달
-    this->action->Finish();
+    this->action->finish();
 
     // 할당된 Action이 종료되었으니 Action 할당 해제
     this->action.reset();

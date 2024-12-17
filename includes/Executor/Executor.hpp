@@ -10,6 +10,7 @@ typedef enum
   ASSIGN,
   READY,
   EXECUTION,
+  TERMINATE,
 } ExecutorState;
 
 class Action;
@@ -50,8 +51,9 @@ public:
     // Action 할당
     void assign(std::shared_ptr<Action>& action);
     void setReady();
-    void PostAction();
-    void Finish();
+    void postAction();
+    void finish();
+    void release();
 
     //기본 Action 정보 Getter
     int getId();

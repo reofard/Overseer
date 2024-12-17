@@ -11,7 +11,7 @@ void Action::assign(std::shared_ptr<Executor>& executor)
     state = ActionState::WAITING;
 }
 
-void Action::SetActionReady()
+void Action::setActionReady()
 {
     // 해당 로직은 action의 의존관계 여부에 따라 호출되기 때문에,
     // 수행할 로봇이 없어도 Action이 의존관계가 없다면 현재 Action상태에 관계 없이 set 될 수 있음
@@ -26,7 +26,7 @@ void Action::SetActionReady()
     }
 }
 
-void Action::SetExecutorReady()
+void Action::setExecutorReady()
 {
     if(state != ActionState::WAITING)
     {
@@ -49,7 +49,7 @@ void Action::ready()
     /*TODO : 로봇에 PostAction()함수 호출*/
 }
 
-void Action::Finish()
+void Action::finish()
 {
     if(state != ActionState::EXECUTING)
     {

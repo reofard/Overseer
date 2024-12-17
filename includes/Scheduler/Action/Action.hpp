@@ -77,10 +77,10 @@ public:
     //제어 로직
     // Action 할당
     void assign(std::shared_ptr<Executor>& executor);
-    void SetActionReady();
-    void SetExecutorReady();
+    void setActionReady();
+    void setExecutorReady();
     void ready();
-    void Finish();
+    void finish();
 
     //기본 Action 정보 Getter
     int getId();
