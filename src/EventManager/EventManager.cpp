@@ -1,6 +1,6 @@
 #include "EventManager/EventManager.hpp"
 
-EventManager::EventManager() : threadPool_(2)
+EventManager::EventManager() : threadPool_(1)
 {
     start();
 }
@@ -9,10 +9,7 @@ void EventManager::submit(std::function<void()> memberFunction)
 {
     if(!run_) return;
     // 작업을 스레드 풀에 추가
-    boost::asio::post(threadPool_, [memberFunction]() {
-        // 작업 실행
-        memberFunction();
-    });
+    boost::asio::post(threadPool_, memberFunction);
 }
 
 int EventManager::addTimerEvent(std::function<void()> memberFunction, std::chrono::duration<float> period)
@@ -48,13 +45,15 @@ void EventManager::start()
             auto now = std::chrono::steady_clock::now();
 
             // 주기적 타이머 이벤트 처리
-            for (auto& [id, function] : events) {
+            for (auto& [id, function] : events)
+            {
                 auto& lastTime = event_last_called_time[id];
                 auto period = event_period[id];
 
                 // 특정 이벤트의 호출 간격(period)이 지났는지 확인
-                if (std::chrono::duration<float>(now - lastTime) >= period) {
-                    boost::asio::post(threadPool_, function);
+                if (std::chrono::duration<float>(now - lastTime) >= period)
+                {
+                    submit(function);
                     lastTime = now;  // 마지막 호출 시간 업데이트
                 }
             }
