@@ -17,6 +17,8 @@
 
 Scheduler::Scheduler()
 {
+    match_table = std::make_unique<MatchTable>();
+
     // Scheduler의 행동트리 구축
     behavior_tree = std::make_shared<Sequence>();
 
@@ -99,10 +101,10 @@ void Scheduler::inputTask(std::vector<std::shared_ptr<Action>> actions, std::vec
 
         // Action queue에 action 추가
         input_mtx.lock();
-        this->input_queue.push_back({std::move(action)});
+        this->input_queue.push_back(action);
         input_mtx.unlock();
         
-        // 이전에 매칭정보가 발급돠지 않은 action의 경우
+        // 이력시 매칭정보가 지정되었지만 실제 스케줄러 내부에서 발급돠지 않은 action의 경우
         if(match_index != -1 && match_set.find(match_index) == match_set.end())
         {
             // 새롭게 match id발급해서 할당
@@ -112,7 +114,7 @@ void Scheduler::inputTask(std::vector<std::shared_ptr<Action>> actions, std::vec
             match_set.insert({match_index, issued_id});
         }
         //action에 할당된 매칭정보가 존재하고 maching table에 등록된 경우
-        if(match_index != -1 && match_set.find(match_index) != match_set.end())
+        else if(match_index != -1 && match_set.find(match_index) != match_set.end())
         {
             issued_id = match_table->issueMatchID(id, match_set.at(match_index));
         }
@@ -151,7 +153,7 @@ void Scheduler::addAction()
 
         // 의존관계 추가
         deps_root.insert(id);
-        auto dep = std::make_shared<Dependency>(id);
+        auto dep = Dependency(id);
         dependencies.insert({id, dep});
     }
     while(!dependency_queue.empty())
@@ -162,8 +164,8 @@ void Scheduler::addAction()
         deps_mtx.unlock();
 
         // 부모자식관계 추가
-        dependencies.at(parent)->childs.insert(child);
-        dependencies.at(child)->parents.insert(parent);
+        dependencies.at(parent).childs.insert(child);
+        dependencies.at(child).parents.insert(parent);
 
         // 자식으로 등록되는 경우 무조건 최상위 노드가 될 수 없음
         if(deps_root.find(child) != deps_root.end())
@@ -171,24 +173,35 @@ void Scheduler::addAction()
             deps_root.erase(child);
         }
     }
+    NEW_ACTION_ADDED.store(false, std::memory_order_acquire);
 }
 
 void Scheduler::adjustDependencies()
 {
     std::cout << "adjustDependencies!" << std::endl;
-    // TODO : 의존관계 분석 및 의존관계 할당
 
     // 현재는 그냥 의존관계 해소된 얘들 무조건 ready queue에 추가
     for(auto& [action_id, action] : actions)
     {
+        // 대기상태의 작업이 아닌경우
         if(action->getState() != ActionState::PENDING)
         {
             continue;
         }
-        if(ready_actions.find(action_id) == ready_actions.end())
+        // 의존관계가 모두 해소되지 않은 액션인 경우
+        if(dependencies.at(action_id).parents.size() != 0)
         {
-            ready_actions.insert(action_id);
+            continue;
         }
+        // 이미 실행중인 action의 경우
+        if(ready_actions.find(action_id) != ready_actions.end())
+        {
+            continue;
+        }
+
+        // 수행 대기큐에 해당 액션 추가
+        ready_actions.insert(action_id);
+        ACTION_READY.store(true, std::memory_order_release);
     }
     // TODO : 의존관계가 해소되지 않아도 먼저 가서 기다려도 되는 작업이면 ready 큐에 넣을 수 있음
     return;
@@ -321,5 +334,13 @@ void Scheduler::releaseActions()
 
         // ready큐에 executor추가하고, running큐에서 제거
         iter = running_actions.erase(iter);
+    }
+}
+
+void Scheduler::releaseDependency(int release_id)
+{
+    for(auto child : dependencies.at(release_id).childs)
+    {
+        dependencies.at(child).parents.erase(release_id);
     }
 }

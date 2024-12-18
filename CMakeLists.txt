@@ -30,13 +30,16 @@ add_executable (overseer
   
   # 스케줄링
   src/Scheduler/Scheduler.cpp
-
   src/Scheduler/MatchTable.cpp
-
   src/Scheduler/Action/Action.cpp
   src/Scheduler/Action/Event.cpp
 
+  # 모니터링
+  src/Monitor/Monitor.cpp
   src/Scheduler/Task/Task.cpp
+
+  # 인터페이스
+  src/Interface/Interface.cpp
 
   # UUID발급 유틸
   src/utils/UuidManager.cpp

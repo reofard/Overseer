@@ -8,6 +8,11 @@
 
 #include <utility>
 
+Interface::Interface(Scheduler* scheduler, Monitor* monitor) : scheduler(scheduler), monitor(monitor)
+{
+    // 뭐든 하겠지
+}
+
 // Task생성, 구조화, 등록 인터페이스
 void Interface::createTask()
 {
@@ -23,7 +28,7 @@ void Interface::createTask()
     for(int i = 0; i < 3; i++)
     {
         //차후 해당 부분은 json에서 파싱
-        int match_id = match_info[i];
+        // int match_id = match_info[i];
         std::string execute_type = "";
         std::string location = "";
         std::string act_data = "";

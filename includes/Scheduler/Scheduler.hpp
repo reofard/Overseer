@@ -61,7 +61,7 @@ private:
 
     // Action간 의존관계 자료구조
     std::set<ActionID> deps_root;
-    std::map<ActionID, std::shared_ptr<Dependency>> dependencies;
+    std::map<ActionID, Dependency> dependencies;
 
 
     // 각 이벤트를 효율적으로 처리하기 위한 Behavior Tree
@@ -97,6 +97,7 @@ public:
     void adjustDependencies();
     void refreshExecutors();
     void releaseActions();
+    void releaseDependency(int release_id);
 
     // Match Table과 당장 수행해야하는 Action을 이용하여 가용 가능 Executor 선별 후 할당
     void match();
