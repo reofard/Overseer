@@ -36,7 +36,7 @@
 1. Clone the repository:
 
 ```bash
-git clone git@github.com:LKRBT/Overseer.git
+git clone --recursive git@github.com:LKRBT/Overseer.git
 ```
 
 2. install Dev Containers Extension:
